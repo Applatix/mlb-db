@@ -35,4 +35,4 @@ inputs:
   parameters:
     code:
 labels:
-  "ax_ea_deployment": '{ "ports": [ { "name": "mlb", "port": 80, "containerPort": 8080 } ] }'
+  "ax_ea_deployment": '{ "ports": [ { "name": "mlb", "port": 80, "containerPort": 5000 } ] }'
