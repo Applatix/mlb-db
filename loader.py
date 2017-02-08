@@ -84,9 +84,14 @@ class MLBLoader(object):
         """
         csv_name = os.path.splitext(os.path.basename(csv_file))[0].lower()
 
-        valid = ['fielding', 'players', 'pitching', 'batting', 'teams', 'franchises']
+        valid = ['fielding', 'players', 'pitching', 'batting', 'teams', 'teamsfranchises', 'halloffame']
         if csv_name not in valid:
             return
+
+        if csv_name == 'teamsfranchises':
+            csv_name = 'franchises'
+        elif csv_name == 'halloffame':
+            csv_name = 'hof'
 
         collections = self.db_client[csv_name]
         logger.info('Loading %s data to DB', csv_name)
