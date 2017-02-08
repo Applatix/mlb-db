@@ -82,7 +82,7 @@ class MLBLoader(object):
         :return:
         """
         csv_name = os.path.splitext(os.path.basename(csv_file))[0]
-        collections = self.db_client[csv_name]
+        collections = self.db_client[csv_name].lower()
         logger.info('Loading %s data to DB', csv_name)
         with open(csv_file) as csvfile:
             data = []
