@@ -70,12 +70,12 @@ inputs:
 steps:
   - checkout:
       template: axscm-checkout
-  - loader:
+  - mongodb:
       template: mlb-loader
       parameters:
         code: "%%steps.checkout.code%%"
         db: "%%fixtures.mongodb.ip%%"
-    run-mlb:
+    frontend:
       template: run-mlb
       parameters:
         code: "%%steps.checkout.code%%"
