@@ -1,0 +1,38 @@
+---
+type: service_template
+subtype: workflow
+name: mlb-workflow
+inputs:
+  parameters:
+    commit:
+      default: "%%session.commit%%"
+    repo:
+      default: "%%session.repo%%"
+steps:
+- checkout:
+    template: axscm-checkout
+- build-mlb:
+    template: run-mlb
+    parameters:
+      code: "%%steps.checkout.code%%"
+
+---
+type: service_template
+subtype: container
+name: run-mlb
+container:
+  resources:
+    mem_mib: 1024
+    cpu_cores: 0.4
+    disk_gb: 2
+  image: docker.io/library/node:0.10
+  docker_options: "-e NODE_ENV=production"
+  command: "cd src && npm install && node app.js"
+inputs:
+  artifacts:
+  - from: "%%code%%"
+    path: "/src"
+  parameters:
+    code:
+labels:
+  "ax_ea_deployment": '{ "ports": [ { "name": "mlb", "port": 80, "containerPort": 8080 } ] }'
