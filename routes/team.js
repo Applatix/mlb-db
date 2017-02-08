@@ -46,10 +46,12 @@ function TeamHandler (cfg, db) {
             }
 
             // massage output
-            result.Name = map[result.Franchise].id;
-            result.Active = map[result.Franchise].active;
-
-            arr.push(result);
+            var franchise = map[result.Franchise];
+            if (franchise) {
+                result.Name = franchise.id;
+                result.Active = franchise.active;
+                arr.push(result);
+            }
         });
     }
 
