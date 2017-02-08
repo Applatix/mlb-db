@@ -93,7 +93,6 @@ class MLBLoader(object):
 
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser(description='Load MLB CSV data to Mongo database')
     parser.add_argument('--year', help='the year of data')
     parser.add_argument('--db', help='the hostname of the database')
