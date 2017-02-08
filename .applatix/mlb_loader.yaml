@@ -1,0 +1,55 @@
+---
+type: service_template
+subtype: container
+name: mlb-loader
+description: MLB data loader
+container:
+  resources:
+    mem_mib: 1024
+    cpu_cores: 0.2
+  image: "python:3.5.2"
+  command: sh -c 'pip install pymongo && pip install requests && python /src/loader.py --db %%db%% --year %%year%% && sleep 99999999'
+inputs:
+  artifacts:
+  - from: "%%code%%"
+    path: "/src"
+  parameters:
+    code:
+    db:
+    year:
+
+---
+type: service_template
+subtype: container
+name: mongodb
+description: MongoDB container
+container:
+  image: "mongo:3.2.9"
+  resources:
+    mem_mib: 512
+    cpu_cores: 0.1
+
+---
+type: service_template
+subtype: workflow
+name: MLB Loader
+description: This is the workflow to load MLB data to MongoDB
+fixtures:
+  - mongodb:
+      template: mongodb
+inputs:
+  parameters:
+    commit:
+      default: "%%session.commit%%"
+    repo:
+      default: "%%session.repo%%"
+    year:
+      default: 2015
+steps:
+  - checkout:
+      template: axscm-checkout
+  - loader:
+      template: mlb-loader
+      parameters:
+        code: "%%steps.checkout.code%%"
+        db: "%%fixtures.mongodb.ip%%"
