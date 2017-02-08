@@ -84,7 +84,7 @@ class MLBLoader(object):
         """
         csv_name = os.path.splitext(os.path.basename(csv_file))[0].lower()
 
-        valid = ['fielding', 'players', 'pitching', 'batting', 'teams']
+        valid = ['fielding', 'players', 'pitching', 'batting', 'teams', 'franchises']
         if csv_name not in valid:
             return
 
