@@ -53,6 +53,7 @@ class MLBLoader(object):
                 except Exception as exc:
                     logger.warn('Got an exception: %s', exc)
                     raise
+        logger.info('Complete: Successfully load data to DB')
 
     def download_csv_file(self):
         """
@@ -82,6 +83,11 @@ class MLBLoader(object):
         :return:
         """
         csv_name = os.path.splitext(os.path.basename(csv_file))[0].lower()
+
+        valid = ['fielding', 'players', 'pitching', 'batting', 'teams']
+        if csv_name not in valid:
+            return
+
         collections = self.db_client[csv_name]
         logger.info('Loading %s data to DB', csv_name)
         with open(csv_file) as csvfile:
