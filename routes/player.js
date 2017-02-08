@@ -337,9 +337,11 @@ function PlayerHandler (cfg, db) {
                 function(err, player) {
                     if (err) return callback(err);
 
-                    result.num = num++;
-                    result.name = player['nameFirst'] + ' ' + player['nameLast'];
-                    arr.push(result);
+                    if (player)  {
+                        result.num = num++;
+                        result.name = player['nameFirst'] + ' ' + player['nameLast'];
+                        arr.push(result);
+                    }
                     callback();
                 }
             );
