@@ -81,9 +81,6 @@ internal_routes:
       - name: tcp
         port: 27017
         target_port: 27017
-      - name: tcp
-        port: 5000
-        target_port: 5000
 containers:
   - server:
       template: mongodb
@@ -112,7 +109,8 @@ external_routes:
   - name: mlb-db
     dns_prefix:
     dns_domain: "%%domain%%"
-    target_port: 80
+    port: 80
+    target_port: 5000
     redirect_http_to_https: true
     ip_white_list:
       - 0.0.0.0/0
