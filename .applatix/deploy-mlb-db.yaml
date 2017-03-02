@@ -25,9 +25,14 @@ name: deploy-mongodb
 description: MongoDB container
 container:
   image: "mongo:3.2.9"
+  command: sh -c 'pip install pymongo && pip install requests && python /src/loader.py --db %%db%% --year %%year%%'
   resources:
     mem_mib: 2048
-    cpu_cores: 0.2
+    cpu_cores: 0.3
+inputs:
+  artifacts:
+  - from: "%%code%%"
+    path: "/src"
 
 ---
 type: service_template
