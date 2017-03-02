@@ -1,8 +1,8 @@
 ---
 type: service_template
 subtype: container
-name: mlb-loader
-description: MLB data loader
+name: mlb-deployment
+description: MLB Data Deployment
 container:
   resources:
     mem_mib: 1024
@@ -21,7 +21,7 @@ inputs:
 ---
 type: service_template
 subtype: container
-name: mongodb
+name: deploy-mongodb
 description: MongoDB container
 container:
   image: "mongo:3.2.9"
@@ -32,14 +32,14 @@ container:
 ---
 type: service_template
 subtype: container
-name: run-mlb
+name: execute-mlb
 container:
   resources:
     mem_mib: 1024
     cpu_cores: 0.4
     disk_gb: 2
   image: docker.io/library/node:0.10
-  docker_options: "-e NODE_ENV=production -e MONGOLAB_URI=mongodb://%%db_host%%:27017/MLB"
+  docker_options: "-e NODE_ENV=production -e MONGOLAB_URI=mongodb://mongo:27017/MLB"
   command: "cd src && npm install && node app.js"
 inputs:
   artifacts:
@@ -47,9 +47,7 @@ inputs:
     path: "/src"
   parameters:
     code:
-    db_host:
 labels:
-  "ax_ea_deployment": '{ "ports": [ { "name": "mlb", "port": 80, "containerPort": 5000 } ] }'
 
 ---
 type: service_template
@@ -117,14 +115,14 @@ external_routes:
       - 0.0.0.0/0
 containers:
   - server:
-      template: run-mlb
+      template: execute-mlb
       parameters:
         PROBE_CMD: sh -c 'ls -l /src'
 
 ---
 type: service_template
 subtype: workflow
-name: MLB Loader
+name: Deploy MLB
 description: This is the workflow to load MLB data to MongoDB
 fixtures:
   - mongodb:
