@@ -1,14 +1,14 @@
 ---
 type: service_template
 subtype: container
-name: mlb-deployment
-description: MLB Data Deployment
+name: insert-mlb-data
+description: MLB Data Insert
 container:
   resources:
     mem_mib: 1024
     cpu_cores: 0.2
   image: "python:3.5.2"
-  command: sh -c 'pip install pymongo && pip install requests && python /src/loader.py --db %%db%% --year %%year%% && sleep 99999999'
+  command: sh -c 'pip install pymongo && pip install requests && python /src/loader.py --db mongodb --year %%year%% && sleep 99999999'
 inputs:
   artifacts:
   - from: "%%code%%"
@@ -33,6 +33,10 @@ inputs:
   artifacts:
   - from: "%%code%%"
     path: "/src"
+  parameters:
+    code:
+    db:
+    year:
 
 ---
 type: service_template
@@ -130,9 +134,6 @@ type: service_template
 subtype: workflow
 name: Deploy MLB
 description: This is the workflow to load MLB data to MongoDB
-fixtures:
-  - mongodb:
-      template: mongodb
 inputs:
   parameters:
     commit:
