@@ -37,7 +37,8 @@ class MLBLoader(object):
         client = pymongo.MongoClient(db, port=port)
         self.db_client = client[MLBDB]
         self.year = str(year)
-
+        logger.info(db)
+        
     def run(self):
         """
         :return:
