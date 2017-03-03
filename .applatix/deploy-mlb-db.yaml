@@ -15,7 +15,6 @@ inputs:
     path: "/src"
   parameters:
     code:
-    db:
     year:
 
 ---
