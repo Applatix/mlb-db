@@ -8,7 +8,7 @@ container:
     mem_mib: 1024
     cpu_cores: 0.2
   image: "python:3.5.2"
-  command: sh -c 'pip install pymongo && pip install requests && sleep 180 && python /src/loader.py --db mongo.%%appname%% --year %%year%%'
+  command: sh -c 'pip install pymongo && pip install requests && python /src/loader.py --db mongo.%%appname%% --year %%year%%'
 inputs:
   artifacts:
   - from: "%%code%%"
