@@ -1,6 +1,5 @@
 ---
-type: service_template
-subtype: container
+type: container
 name: mlb-loader
 description: MLB data loader
 container:
@@ -19,8 +18,7 @@ inputs:
     year:
 
 ---
-type: service_template
-subtype: container
+type: container
 name: mongodb
 description: MongoDB container
 container:
@@ -30,8 +28,7 @@ container:
     cpu_cores: 0.2
 
 ---
-type: service_template
-subtype: container
+type: container
 name: run-mlb
 container:
   resources:
@@ -52,8 +49,7 @@ labels:
   "ax_ea_deployment": '{ "ports": [ { "name": "mlb", "port": 80, "containerPort": 5000 } ] }'
 
 ---
-type: service_template
-subtype: workflow
+type: workflow
 name: MLB Loader
 description: This is the workflow to load MLB data to MongoDB
 fixtures:
