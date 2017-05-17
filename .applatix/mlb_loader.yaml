@@ -2,12 +2,7 @@
 type: container
 name: mlb-loader
 description: MLB data loader
-container:
-  resources:
-    mem_mib: 1024
-    cpu_cores: 0.2
-  image: "python:3.5.2"
-  command: sh -c 'pip install pymongo && pip install requests && python /src/loader.py --db %%db%% --year %%year%% && sleep 99999999'
+
 inputs:
   artifacts:
   - from: "%%code%%"
@@ -17,10 +12,18 @@ inputs:
     db:
     year:
 
+container:
+  image: "python:3.5.2"
+  command: sh -c 'pip install pymongo && pip install requests && python /src/loader.py --db %%db%% --year %%year%% && sleep 99999999'
+  resources:
+    mem_mib: 1024
+    cpu_cores: 0.2
+
 ---
 type: container
 name: mongodb
 description: MongoDB container
+
 container:
   image: "mongo:3.2.9"
   resources:
@@ -30,14 +33,7 @@ container:
 ---
 type: container
 name: run-mlb
-container:
-  resources:
-    mem_mib: 1024
-    cpu_cores: 0.4
-    disk_gb: 2
-  image: docker.io/library/node:0.10
-  docker_options: "-e NODE_ENV=production -e MONGOLAB_URI=mongodb://%%db_host%%:27017/MLB"
-  command: "cd src && npm install && node app.js"
+
 inputs:
   artifacts:
   - from: "%%code%%"
@@ -45,6 +41,15 @@ inputs:
   parameters:
     code:
     db_host:
+
+container:
+  image: docker.io/library/node:0.10
+  docker_options: "-e NODE_ENV=production -e MONGOLAB_URI=mongodb://%%db_host%%:27017/MLB"
+  command: "cd src && npm install && node app.js"
+  resources:
+    mem_mib: 1024
+    cpu_cores: 0.4
+
 labels:
   "ax_ea_deployment": '{ "ports": [ { "name": "mlb", "port": 80, "containerPort": 5000 } ] }'
 
@@ -52,9 +57,7 @@ labels:
 type: workflow
 name: MLB Loader
 description: This is the workflow to load MLB data to MongoDB
-fixtures:
-  - mongodb:
-      template: mongodb
+
 inputs:
   parameters:
     commit:
@@ -63,6 +66,11 @@ inputs:
       default: "%%session.repo%%"
     year:
       default: 2015
+
+fixtures:
+  - mongodb:
+      template: mongodb
+
 steps:
   - checkout:
       template: axscm-checkout
