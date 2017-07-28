@@ -149,6 +149,14 @@ inputs:
 
 scale:
   min: 1
+
+
+strategy:
+  type: rolling_update
+  rolling_update:
+    max_unavailable: 0
+    max_surge: 1  
+
 external_routes:
   - name: mlb-db
     dns_prefix:
